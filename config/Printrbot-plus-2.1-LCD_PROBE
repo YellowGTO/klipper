@@ -1,0 +1,137 @@
+# This file contains common pin mappings for Printrboard boards (rev B
+# through D). To use this config the firmware should be compiled for
+# the AVR at90usb1286.
+
+# Note that the "make flash" command will not work for Printrboard!
+# To flash:
+# - Connect the "BOOT" jumper.
+# - Press the reset button (on board) to enter into DFU mode.
+# - Connect via USB and run:
+# avrdude -c flip1 -p usb1286 -U flash:w:out/klipper.elf.hex
+
+#Printrboard Plus 2.1, Printrboard REV D
+# Auto Level probe mount: https://www.thingiverse.com/thing:321579
+
+# See the example.cfg file for a description of available parameters.
+
+[stepper_x]
+step_pin: PA0
+dir_pin: !PA1
+enable_pin: !PE7
+step_distance: .0125
+endstop_pin: ^PE3
+position_endstop: 0
+position_max: 200
+homing_speed: 50
+
+[stepper_y]
+step_pin: PA2
+dir_pin: !PA3
+enable_pin: !PE6
+step_distance: .0125
+endstop_pin: ^PB0
+position_endstop: 0
+position_max: 200
+homing_speed: 50
+
+[stepper_z]
+step_pin: PA4
+dir_pin: !PA5
+enable_pin: !PC7
+step_distance: .0006
+#endstop_pin: ^PE4
+endstop_pin: probe:z_virtual_endstop
+#position_endstop: 0.5
+position_max: 200
+position_min: -4
+homing_speed: 5
+[extruder]
+step_pin: PA6
+dir_pin: PA7
+enable_pin: !PC3
+step_distance: .0105
+nozzle_diameter: 0.400
+filament_diameter: 1.750
+heater_pin: PC5
+sensor_type: EPCOS 100K B57560G104F
+sensor_pin: PF1
+control: pid
+pid_Kp: 22.2
+pid_Ki: 1.08
+pid_Kd: 114
+min_temp: 0
+max_temp: 250
+
+[heater_bed]
+heater_pin: PC4
+sensor_type: EPCOS 100K B57560G104F
+sensor_pin: PF0
+control: watermark
+min_temp: 0
+max_temp: 130
+
+[fan]
+pin: PC6
+
+[mcu]
+serial: /dev/serial/by-id/usb-Klipper_at90usb1286_12345-if00
+
+[printer]
+kinematics: cartesian
+max_velocity: 300
+max_accel: 3000
+max_z_velocity: 5
+max_z_accel: 100
+
+# Define a probe
+[probe]
+pin: ^PE4
+z_offset: .9
+x_offset: 46
+
+# The safe_z_home section modifies the default G28 behavior
+[safe_z_home]
+home_xy_position: 0,0
+speed: 50
+z_hop: 15
+z_hop_speed: 5
+
+# Example bed_mesh config section
+[bed_mesh]
+min_point: 0,0
+max_point: 160,200
+probe_count: 4,4
+
+
+
+# This file provides example configuration for common "RepRap" style
+# LCD displays that use EXP1/EXP2 plugs.
+
+# To configure a display from this file, make sure the main
+# printer.cfg file has a [board_pins] config section defining pin
+# aliases for the EXP1/EXP2 plugs, find the appropriate LCD type in
+# this file, and then copy-and-paste that section into printer.cfg.
+
+# See the "example-extras.cfg" file for description of config parameters.
+
+
+
+
+######################################################################
+# "RepRapDiscount 2004 Smart Controller" type displays
+######################################################################
+
+[display]
+lcd_type: hd44780
+rs_pin: PE1
+e_pin: PE0
+d4_pin: PD7
+d5_pin: PD6
+d6_pin: PD5
+d7_pin: PD4
+encoder_pins: ^PC0, ^PC1
+click_pin: ^!PC2
+#kill_pin: ^!EXP2_8
+
+#[output_pin beeper]
+#pin: EXP1_1
